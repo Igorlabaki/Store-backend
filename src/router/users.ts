@@ -13,14 +13,14 @@ const updateUserUsernameController  = new UpdateUserUsernameController()
 
 // List users
     usersRoutes.get("/listUsers",ensureAutheticate,(request,response) => {
-        listUserFactory().handle(request,response)
+       return listUserFactory().handle(request,response)
     })
 //
 
 // Get User By Id
     usersRoutes.route('/:userId')
    .get(ensureAutheticate,(request,response) => {
-        getUserByIdFactory().handle(request,response)
+       return getUserByIdFactory().handle(request,response)
     })
 //
 

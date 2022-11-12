@@ -28,15 +28,15 @@ app.use('/products',productsRoutes)
 app.use('/carts', cartsRoutes)
 app.use('/productCart', productCartsRoutes)
 
-app.use(
+/* app.use(
   (error: Error, req: Request,resp:  Response, next: NextFunction) => {
   return resp.json({
       status: "Error",
       message: error.message
   })
-}) 
+})  */
 
-/* app.use(
+app.use(
     (err: Error, request: Request, response: Response, next: NextFunction) => {
       if (err instanceof Error) {
         return response.status(400).json({
@@ -48,6 +48,6 @@ app.use(
         message: `Internal server error - ${err}`,
       });
     }
-  ) */
+  ) 
 
 app.listen(3333,() => console.log("Server is running on port 3333"))

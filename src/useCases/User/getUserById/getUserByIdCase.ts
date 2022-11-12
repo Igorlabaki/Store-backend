@@ -8,7 +8,7 @@ class GetUserByIdCase{
     async execute(id: string){
 
         // Get User By Id
-            const user : User = await this.usersRepository.getById(id)
+            const user  = await  this.usersRepository.getById(id)
         //
 
         if(!user){

@@ -8,5 +8,5 @@ export const getUserByIdFactory = () => {
   const getUserByIdCase         = new GetUserByIdCase(primaUserRepository);
   const getUserByIdController   = new GetUserByIdController(getUserByIdCase);
 
-  return getUserByIdController;
+  return (getUserByIdController);
 };
