@@ -1,25 +1,27 @@
-import {Router} from "express"
+import { Router } from "express"
 import { ensureAutheticate } from "../middleware/ensureAuthenticate"
-import { ListUserController } from "../useCases/User/listUser/listUserController"
+import { getUserByIdFactory } from "../useCases/User/getUserById/getUserByIdFactory"
+import { listUserFactory } from "../useCases/User/listUser/listUserFactory"
 import { UpdateUserEmailController } from "../useCases/User/updateUserEmail/updateUserEmailController"
-import { SelectUserByIdController } from "../useCases/User/selectUserById/selectUserByIdController"
 import { UpdateUserUsernameController } from "../useCases/User/updateUserUsername/updateUsernameController"
+
 
 const usersRoutes = Router()
 
-const listUserController            = new ListUserController()
-const selectUserByIdController      = new SelectUserByIdController()
 const updateUserEmailController     = new UpdateUserEmailController()
 const updateUserUsernameController  = new UpdateUserUsernameController()
 
-
 // List users
-    usersRoutes.get("/userList",ensureAutheticate,listUserController.handle)
+    usersRoutes.get("/listUsers",ensureAutheticate,(request,response) => {
+        listUserFactory().handle(request,response)
+    })
 //
 
-// Find User By Id
+// Get User By Id
     usersRoutes.route('/:userId')
-    .get(ensureAutheticate,selectUserByIdController.handle)
+   .get(ensureAutheticate,(request,response) => {
+        getUserByIdFactory().handle(request,response)
+    })
 //
 
 //  Update user username

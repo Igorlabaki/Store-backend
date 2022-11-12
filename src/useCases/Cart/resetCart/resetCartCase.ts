@@ -1,5 +1,5 @@
 import {client} from "../../../prisma/client"
-import { PrismaCartRepository } from "../../../repository/PrismaCartRepository"
+import { PrismaCartRepository } from "../../../repository/prisma/PrismaCartRepository"
 
 class ResetCartCase{
 

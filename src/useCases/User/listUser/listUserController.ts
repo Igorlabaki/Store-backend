@@ -3,13 +3,14 @@ import { ListUserCase } from "./listUserCase"
 
 
 class ListUserController{
+
+    constructor(private listUserCase: ListUserCase) {}
+
     async handle(req: Request, resp: Response){
 
-        const listUserCase = new ListUserCase()
+        const users = await this.listUserCase.execute()
 
-        const user = await listUserCase.execute()
-
-        return resp.json(user)
+        return resp.json(users)
     }
 }
 

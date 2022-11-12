@@ -1,6 +1,6 @@
 import { PrismaClient, RefreshToken } from "@prisma/client";
 import dayjs from "dayjs";
-import { refreshToken } from "../Interfaces";
+import { refreshToken } from "../../Interfaces";
 
 export interface ITokenRepository {
   create:(reference: string) => Promise<refreshToken>

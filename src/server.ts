@@ -1,12 +1,12 @@
 import cors from "cors"
 import "express-async-errors"
+import swaggerDocs from './swagger.json'
+import swaggerUi from 'swagger-ui-express'
+import { authRoutes } from "./router/auth"
 import { usersRoutes } from "./router/users"
 import { tokenRoutes } from "./router/token"
-import { productsRoutes } from "./router/products"
 import { cartsRoutes } from "./router/carts"
-import { authRoutes } from "./router/auth"
-/* import {saweggerJsDoc} from "swagger-jsdoc"
-const swaggerUI = require("swagger-ui-express") */
+import { productsRoutes } from "./router/products"
 import express, { NextFunction, Request, Response } from "express"
 import { productCartsRoutes } from "./router/productCarts"
 
@@ -17,30 +17,9 @@ app.use(cors({
     methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
 }))
 
-/* const options = {
-    definition:{
-        openapi: "3.0.0",
-        info:{
-            title: "Library",
-            version: "1.0.0",
-            description: "Store api"
-        },
-        server:[
-            {
-                url: "http://localhost:3333"
-            }
-        ],
-    },
-    apis: ["./routes/*.ts"]
-}
-
-
-const specs = saweggerJsDoc(options) */
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 
 app.use(express.json())
-
-
-/* app.use('/api-docs', swaggerUI.server) */
 
 app.use('/auth', authRoutes)
 app.use('/users', usersRoutes)
@@ -50,12 +29,25 @@ app.use('/carts', cartsRoutes)
 app.use('/productCart', productCartsRoutes)
 
 app.use(
-    (error: Error, req: Request,resp:  Response, next: NextFunction) => {
-    return resp.json({
-        status: 'Error',
-        message: error.message
-    })
-})
+  (error: Error, req: Request,resp:  Response, next: NextFunction) => {
+  return resp.json({
+      status: "Error",
+      message: error.message
+  })
+}) 
 
+/* app.use(
+    (err: Error, request: Request, response: Response, next: NextFunction) => {
+      if (err instanceof Error) {
+        return response.status(400).json({
+          message: err.message,
+        });
+      }
+      return response.status(500).json({
+        status: "error",
+        message: `Internal server error - ${err}`,
+      });
+    }
+  ) */
 
 app.listen(3333,() => console.log("Server is running on port 3333"))

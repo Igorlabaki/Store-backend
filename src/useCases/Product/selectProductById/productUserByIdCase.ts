@@ -1,5 +1,5 @@
 import {client} from "../../../prisma/client"
-import { PrismaProductRepository } from "../../../repository/PrismaProductRepository"
+import { PrismaProductRepository } from "../../../repository/prisma/PrismaProductRepository"
 
 class SelectProductByIdCase{
 

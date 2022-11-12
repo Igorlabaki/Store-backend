@@ -1,6 +1,6 @@
 import {client} from "../../../prisma/client"
 import {hash} from "bcryptjs"
-import { PrismaProductRepository } from "../../../repository/PrismaProductRepository"
+import { PrismaProductRepository } from "../../../repository/prisma/PrismaProductRepository"
 
 
 class DeleteProductCase{

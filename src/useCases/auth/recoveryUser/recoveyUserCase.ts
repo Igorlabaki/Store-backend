@@ -1,6 +1,6 @@
 import {client} from "../../../prisma/client"
 import jwt_decode from "jwt-decode";
-import { PrismaUserRepository } from "../../../repository/PrismaUserRepository";
+import { PrismaUserRepository } from "../../../repository/prisma/PrismaUserRepository";
 
 class RecoveyUserCase{
 
@@ -16,8 +16,12 @@ class RecoveyUserCase{
 
         // Get user by Id 
             const user = await userRepo.getById(decoded.id)
+
+            if(!user){
+                throw new Error("User not found")
+            }
         //
-        
+
         return user
     }
 }

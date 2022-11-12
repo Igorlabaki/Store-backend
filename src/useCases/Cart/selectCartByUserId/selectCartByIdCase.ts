@@ -1,6 +1,5 @@
 import {client} from "../../../prisma/client"
-import { PrismaCartRepository } from "../../../repository/PrismaCartRepository"
-import { SelectUserByIdCase } from "../../User/selectUserById/selectUserByIdCase"
+import { PrismaCartRepository } from "../../../repository/prisma/PrismaCartRepository"
 
 class SelectCartByUserIdCase{
 

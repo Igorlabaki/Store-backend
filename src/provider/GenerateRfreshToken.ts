@@ -1,6 +1,6 @@
 import { client } from "../prisma/client"
 import dayjs from 'dayjs'
-import { PrismaTokenRepository } from "../repository/PrismaTokenRepository"
+import { PrismaTokenRepository } from "../repository/prisma/PrismaTokenRepository"
 
 class GenerateRefreshToken{
 

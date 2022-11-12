@@ -1,5 +1,4 @@
 import { Request, Response } from "express"
-import { SelectUserByIdCase } from "../../User/selectUserById/selectUserByIdCase"
 import { RegisterCartCase } from "./registerCartCase"
 
 class RegisterCartController{

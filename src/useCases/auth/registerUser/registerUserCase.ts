@@ -1,9 +1,9 @@
 import {hash} from "bcryptjs"
 import {client} from "../../../prisma/client"
 import { validateInput } from "../../../util/validateInput"
+import { IRegisterUserRequest } from "../../../repository/IUserRepositories"
 import { GenerateRefreshToken } from "../../../provider/GenerateRfreshToken"
-import {IRegisterUserRequest} from '../../../repository/PrismaUserRepository'
-import { PrismaUserRepository } from "../../../repository/PrismaUserRepository"
+import { PrismaUserRepository } from "../../../repository/prisma/PrismaUserRepository"
 import { GenerateTokenProvider } from "../../../provider/GenerateTokenProvider"
 
 

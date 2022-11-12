@@ -1,5 +1,5 @@
 import {client} from "../../../prisma/client"
-import { IUpdateProductNameRequest, PrismaProductRepository } from "../../../repository/PrismaProductRepository"
+import { IUpdateProductNameRequest, PrismaProductRepository } from "../../../repository/prisma/PrismaProductRepository"
 
 class UpdateProductNameCase{
 

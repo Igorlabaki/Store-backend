@@ -1,6 +1,8 @@
 import { User } from "@prisma/client"
 import {client} from "../../../prisma/client"
-import { IUpdateUsernameRequest, PrismaUserRepository } from "../../../repository/PrismaUserRepository"
+import { IUpdateUsernameRequest } from "../../../repository/IUserRepositories"
+import { PrismaUserRepository } from "../../../repository/prisma/PrismaUserRepository"
+
 
 class UpdateUserUsernameCase{
 

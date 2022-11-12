@@ -1,6 +1,6 @@
 import {client} from "../../../prisma/client"
 import { validateInput } from "../../../util/validateInput"
-import { IProductRequest, PrismaProductRepository } from "../../../repository/PrismaProductRepository"
+import { IProductRequest, PrismaProductRepository } from "../../../repository/prisma/PrismaProductRepository"
 
 interface IUserRequest{
     name:string,

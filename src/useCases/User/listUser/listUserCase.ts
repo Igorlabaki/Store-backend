@@ -1,20 +1,21 @@
-import {client} from "../../../prisma/client"
-import { PrismaUserRepository } from "../../../repository/PrismaUserRepository"
-
-
+import { IUserRepository } from "../../../repository/IUserRepositories"
 class ListUserCase{
+
+    constructor(private usersRepository: IUserRepository) {}
 
     async execute(){
 
-        // Import repository
-            const userRepo = new PrismaUserRepository(client)
-       //
-
         // Get user list 
-            const usersList = await userRepo.list()
+            const users = await this.usersRepository.list()
         //
 
-        return usersList
+        // No users registered
+            if(users?.length === 0){
+              throw new Error("No user register yet!")
+            }
+        //  
+
+        return users
     }
 }
 

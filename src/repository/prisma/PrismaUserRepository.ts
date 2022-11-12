@@ -1,44 +1,19 @@
 
 import { PrismaClient, User } from "@prisma/client";
+import { IRegisterUserRequest, IUpdateEmailRequest, IUpdatePasswordRequest, IUpdateUsernameRequest, IUserRepository } from "../IUserRepositories";
 
-export interface IUserRepository {
-  list:() => Promise<User[]>
-  register:(client:User)         => Promise<User>
-  getById:(reference: string)    => Promise<User>
-  getByEmail:(reference: string) => Promise<User>
-}
-
-export interface IUpdateEmailRequest {
-  id    : string,
-  email : string
-}
-
-export interface IUpdatePasswordRequest {
-  id      : string,
-  password: string
-}
-
-export interface IUpdateUsernameRequest {
-  id      : string,
-  username: string
-}
-
-export interface IRegisterUserRequest{
-  username: string,
-  password: string,
-  email   : string
-}
 
 export class PrismaUserRepository implements IUserRepository {
 
   constructor (private readonly prisma: PrismaClient){}
 
-  async register (reference: IRegisterUserRequest): Promise<User> {
+  async register ({email,password,username}: IRegisterUserRequest): Promise<User> {
+
     return await this.prisma.user.create({
       data:{
-          username: reference.username,
-          email: reference.email,
-          password: reference.password,
+          username: username,
+          email   : email,
+          password: password,
       }
   })
   }
@@ -58,6 +33,14 @@ export class PrismaUserRepository implements IUserRepository {
                 }
             }
         }
+      }
+    })
+  }
+
+  async delete(reference: string): Promise<User> {
+    return await this.prisma.user.delete({
+      where:{
+        id: reference
       }
     })
   }
@@ -82,13 +65,13 @@ export class PrismaUserRepository implements IUserRepository {
  }
 
  
- async updatePassword (reference: IUpdatePasswordRequest): Promise<User> {
+ async updatePassword ({id,password}: IUpdatePasswordRequest): Promise<User> {
   return await this.prisma.user.update({
    where:{
-    id: reference.id
+    id: id
    },
    data:{
-    password: reference.password
+    password: password
    },
    include:{
      Cart: {
@@ -104,13 +87,13 @@ export class PrismaUserRepository implements IUserRepository {
  })
 }
 
-async updateEmail (reference: IUpdateEmailRequest): Promise<User> {
+async updateEmail ({id,email}: IUpdateEmailRequest): Promise<User> {
   return await this.prisma.user.update({
    where:{
-    id: reference.id
+    id: id
    },
    data:{
-    email: reference.email
+    email: email
    },
    include:{
      Cart: {
@@ -126,13 +109,13 @@ async updateEmail (reference: IUpdateEmailRequest): Promise<User> {
  })
 }
 
-async updateUsername (reference: IUpdateUsernameRequest): Promise<User> {
+async updateUsername ({id,username}: IUpdateUsernameRequest): Promise<User> {
   return await this.prisma.user.update({
     where:{
-      id: reference.id
+      id: id
     },
     data:{
-      username: reference.username
+      username: username
     },
     include:{
       Cart: {
@@ -150,7 +133,19 @@ async updateUsername (reference: IUpdateUsernameRequest): Promise<User> {
 
 
   async list (): Promise<User[]> {
-    return await this.prisma.user.findMany()
+    return await this.prisma.user.findMany({
+      include:{
+        Cart: {
+            include:{
+                ProductCart:{
+                    include:{
+                        product: true
+                    }
+                }
+            }
+        }
+      }
+    })
   }
   
 }

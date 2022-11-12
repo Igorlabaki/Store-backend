@@ -1,7 +1,7 @@
 import {compare} from "bcryptjs"
 import {client} from "../../../prisma/client"
 import { GenerateRefreshToken } from "../../../provider/GenerateRfreshToken"
-import { PrismaUserRepository } from "../../../repository/PrismaUserRepository"
+import { PrismaUserRepository } from "../../../repository/prisma/PrismaUserRepository"
 import { GenerateTokenProvider } from "../../../provider/GenerateTokenProvider"
 
 interface IRequest{

@@ -1,7 +1,7 @@
 import { Cart, ProductCart } from "@prisma/client"
 import {client} from "../../../prisma/client"
-import { PrismaCartRepository } from "../../../repository/PrismaCartRepository"
-import { isProductInCartProps, PrismaProductCartRepository } from "../../../repository/PrismaProductCartRepository"
+import { PrismaCartRepository } from "../../../repository/prisma/PrismaCartRepository"
+import { isProductInCartProps, PrismaProductCartRepository } from "../../../repository/prisma/PrismaProductCartRepository"
 
 interface IUserRequest{
     productId:string,

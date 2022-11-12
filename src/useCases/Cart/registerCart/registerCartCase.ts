@@ -1,6 +1,6 @@
 import {client} from "../../../prisma/client"
-import { PrismaCartRepository } from "../../../repository/PrismaCartRepository"
-import { PrismaUserRepository } from "../../../repository/PrismaUserRepository"
+import { PrismaCartRepository } from "../../../repository/prisma/PrismaCartRepository"
+import { PrismaUserRepository } from "../../../repository/prisma/PrismaUserRepository"
 
 interface ICartRequest{
     userId:string,

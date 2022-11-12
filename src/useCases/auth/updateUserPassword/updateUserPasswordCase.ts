@@ -1,6 +1,8 @@
 import { hash } from "bcryptjs"
 import {client} from "../../../prisma/client"
-import { IUpdatePasswordRequest, PrismaUserRepository } from "../../../repository/PrismaUserRepository"
+import { IUpdatePasswordRequest } from "../../../repository/IUserRepositories"
+import { PrismaUserRepository } from "../../../repository/prisma/PrismaUserRepository"
+
 
 class UpdateUserPasswordCase{
 

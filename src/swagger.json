@@ -1,0 +1,104 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Store Backend",
+        "description": "Essa API tem com objetivo a manipulacao e registros dos dados dos usarios, produtos, carrinho de compras e suas relacoes.",
+        "termsOfService": "https://www.linkedin.com/in/igor-augusto-labaki-goncalo-b75918199/",
+        "contact": {
+            "email": "igorlabakig@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3333/",
+            "description": "API teste"
+        }
+    ],
+    "paths":{
+        "/auth/registerUser":{
+            "post":{
+                "tags": ["Auth"],
+                "summary": "Register user",
+                "description": "Register a new user",
+                "requestBody": {
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "$ref": "#/components/schemas/User"
+                            },
+                            "example": {
+                                "username": "Igor Goncalo",
+                                "email": "igorlabakig@gmail.com",
+                                "password": "12345678"  
+                            }
+                        }
+                    }
+                } ,
+                "responses":{
+                    "200": {
+                        "description": "User registered successfully",
+                        "content":{
+                            "application/json":{
+                                    "schema":{
+                                    "type": "object"
+                                }    
+                            }
+                        }
+                    },
+                    "Error":{
+                        "description": "User already exists!"
+                    }
+                }
+            }
+        },
+        "/auth/recoveryUser":{
+            "get":{
+                "tags": ["Auth"],
+                "summary": "Recovery user data",
+                "description": "Recovery user data",
+                "security": [{"bearerAuth": []}],
+                "responses":{
+                    "200": {
+                        "description": "Recovery user successfully",
+                        "content":{
+                            "application/json":{
+                                    "schema":{
+                                    "type": "object"
+                                }    
+                            }
+                        }
+                    },
+                    "Error":{
+                        "description": "User not found!"
+                    }
+                }
+            }
+        }
+    },
+    "components":{
+        "schemas":{
+            "User": {
+                "type":"object",
+                "properties":{
+                    "username":{
+                        "type": "string"
+                    },
+                    "email":{
+                        "type": "string"
+                    },
+                    "password":{
+                        "type": "string"
+                    }
+                }
+            },
+            "securitySchemes":{
+                "bearerAuth":{
+                    "type": "http",
+                    "scheme":"bearer",
+                    "bearerFormat": "JWT"
+                }
+            }
+        }
+    }
+}
