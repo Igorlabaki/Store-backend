@@ -1,22 +1,20 @@
 import { User } from "@prisma/client"
-import {client} from "../../../prisma/client"
-import { IUpdateEmailRequest } from "../../../repository/IUserRepositories"
-import { PrismaUserRepository } from "../../../repository/prisma/PrismaUserRepository"
-
-
+import { IUpdateEmailRequest, IUserRepository } from "../../../repository/IUserRepositories"
 class UpdateUserEmailCase{
+    constructor(private userRepository: IUserRepository) {}
 
     async execute(email: string,userId:string){
-
-        // Import repository
-            const userRepo = new PrismaUserRepository(client)
+        // Validate inputs
+            if(!email){
+                throw new Error("Email is necessary.")
+            }
         //
 
        // Validate if user exists
-            const user : User = await userRepo.getById(userId)
+            const user : User = await this.userRepository.getById(userId)
 
             if(!user){
-                throw new Error("User not found")
+                throw new Error("User not found.")
             }
         //
 
@@ -26,7 +24,7 @@ class UpdateUserEmailCase{
                 email,          
             }
             
-            const userUpdated = await userRepo.updateEmail(userInput)
+            const userUpdated: User = await this.userRepository.updateEmail(userInput)
         //
         
         return {userUpdated}

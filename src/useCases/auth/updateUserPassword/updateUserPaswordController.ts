@@ -3,13 +3,13 @@ import { UpdateUserPasswordCase } from "./updateUserPasswordCase"
 
 
 class UpdateUserPasswordController{
+    constructor(private updateUserUsernameCase: UpdateUserPasswordCase) {}
+
     async handle(req: Request, resp: Response){
 
         const {password,id} = req.body
 
-        const updateUserPasswordCase = new UpdateUserPasswordCase()
-
-        const userSelected = await updateUserPasswordCase.execute(
+        const userSelected = await this.updateUserUsernameCase.execute(
             password,id
         )
 

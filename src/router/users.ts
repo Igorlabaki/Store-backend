@@ -1,15 +1,12 @@
 import { Router } from "express"
 import { ensureAutheticate } from "../middleware/ensureAuthenticate"
-import { getUserByIdFactory } from "../useCases/User/getUserById/getUserByIdFactory"
 import { listUserFactory } from "../useCases/User/listUser/listUserFactory"
-import { UpdateUserEmailController } from "../useCases/User/updateUserEmail/updateUserEmailController"
-import { UpdateUserUsernameController } from "../useCases/User/updateUserUsername/updateUsernameController"
+import { getUserByIdFactory } from "../useCases/User/getUserById/getUserByIdFactory"
+import { updateUserEmail } from "../useCases/User/updateUserEmail/updateUserEmailFactory"
+import { updateUserUsername } from "../useCases/User/updateUserUsername/updateUserUsernameFactory"
 
 
 const usersRoutes = Router()
-
-const updateUserEmailController     = new UpdateUserEmailController()
-const updateUserUsernameController  = new UpdateUserUsernameController()
 
 // List users
     usersRoutes.get("/listUsers",ensureAutheticate,(request,response) => {
@@ -26,12 +23,16 @@ const updateUserUsernameController  = new UpdateUserUsernameController()
 
 //  Update user username
     usersRoutes.route('/updateUsername/:userId')
-    .put(ensureAutheticate,updateUserUsernameController.handle)
+    .put(ensureAutheticate,(request,response) => {
+        return updateUserUsername().handle(request,response)
+    })
 //
 
 // Update user email
-    usersRoutes.route('/updateEmail/:userId')
-    .put(ensureAutheticate,updateUserEmailController.handle)
+    usersRoutes.route('/updateUserEmail/:userId')
+    .put(ensureAutheticate,(request,response) => {
+        return updateUserEmail().handle(request,response)
+     })
 //
 
 export {usersRoutes}

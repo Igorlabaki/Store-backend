@@ -1,22 +1,25 @@
 import { hash } from "bcryptjs"
 import {client} from "../../../prisma/client"
-import { IUpdatePasswordRequest } from "../../../repository/IUserRepositories"
+import { IUpdatePasswordRequest, IUserRepository } from "../../../repository/IUserRepositories"
 import { PrismaUserRepository } from "../../../repository/prisma/PrismaUserRepository"
 
 
 class UpdateUserPasswordCase{
+    constructor(private userRepository: IUserRepository) {}
 
     async execute(password:string,id:string){
 
-        // Import repository
-            const userRepo = new PrismaUserRepository(client)
-        //
+        // Validate inputs
+          if(!password){
+            throw new Error("New password is necessary.")
+        }
+    //
 
         // Validate if user exists
-            const userAlreadyExists = await userRepo.getById(id)
+            const userAlreadyExists = await this.userRepository.getById(id)
 
             if(!userAlreadyExists){
-                throw new Error("User not found")
+                throw new Error("User not found.")
             }
         //
 
@@ -28,7 +31,7 @@ class UpdateUserPasswordCase{
                 password: passwordHash
             }
 
-            const user = await userRepo.updatePassword(userInput)
+            const user = await this.userRepository.updatePassword(userInput)
         //
 
         return {user}

@@ -1,22 +1,25 @@
 import { User } from "@prisma/client"
 import {client} from "../../../prisma/client"
-import { IUpdateUsernameRequest } from "../../../repository/IUserRepositories"
+import { IUpdateUsernameRequest, IUserRepository } from "../../../repository/IUserRepositories"
 import { PrismaUserRepository } from "../../../repository/prisma/PrismaUserRepository"
 
 
 class UpdateUserUsernameCase{
 
-    async execute(username: string,userId:string){
+    constructor(private userRepository: IUserRepository) {}
 
-        // Import repository
-            const userRepo = new PrismaUserRepository(client)
+    async execute(username: string,userId:string){
+        // Validate inputs
+            if(!username){
+                throw new Error("Username is necessary.")
+            }
         //
 
         // Validate if user exists
-            const user : User = await userRepo.getById(userId)
+            const user : User = await this.userRepository.getById(userId)
 
             if(!user){
-                throw new Error("User not found")
+                throw new Error("User not found.")
             }
         //
 
@@ -26,7 +29,7 @@ class UpdateUserUsernameCase{
                 username,          
             }
             
-            const userUpdated : User = await userRepo.updateUsername(userInput)
+            const userUpdated : User = await this.userRepository.updateUsername(userInput)
         //
 
         return {userUpdated}         

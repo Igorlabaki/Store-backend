@@ -37,8 +37,7 @@ class UsersRepositoryInMemory implements IUserRepository {
   async updateEmail({email,id}: IUpdateEmailRequest):Promise<User>{
     const user = this.users.find((user) => user.id === id);
     user.email = email
-    return user
- 
+    return user 
   }
 
   async updateUsername({id,username}: IUpdateUsernameRequest):Promise<User>{

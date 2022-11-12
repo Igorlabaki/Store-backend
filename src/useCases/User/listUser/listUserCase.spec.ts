@@ -3,11 +3,10 @@ import { describe,beforeAll,it,expect, beforeEach } from "vitest";
 import { IRegisterUserRequest, IUserRepository } from "../../../repository/IUserRepositories";
 import { UsersRepositoryInMemory } from "../../../repository/in-memory/UsersRepositoryInMemory";
 
-describe("List Users", async () => {
+describe("List Userd", async () => {
     let userRepository: IUserRepository;
     let listUserCase: ListUserCase;
   
-    
     beforeEach(async () => {
         // called once before all tests run
         userRepository = new UsersRepositoryInMemory();
@@ -38,7 +37,7 @@ describe("List Users", async () => {
 
         await expect(listUserCase.execute()).rejects.toEqual(
 
-        new Error("No user register yet!")
+            new Error("No user register yet!")
 
         );
     }); 
