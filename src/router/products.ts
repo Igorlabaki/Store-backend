@@ -1,36 +1,41 @@
 import { Router } from "express";
 import { ensureAutheticate } from "../middleware/ensureAuthenticate"
-import { ListProductController } from "../useCases/Product/listProdcut/ListProductController"
-import { DeleteProductController } from "../useCases/Product/deleteProduct/deleteProductController"
-import { RegisterProductController } from "../useCases/Product/registerProduct/registerProductController"
-import { SelectProductByIdController } from "../useCases/Product/selectProductById/productUserByIdController"
-import { UpdateProductNameDataController } from "../useCases/Product/updateProductName/updateProductNameController";
+import { listProductFactory } from "../useCases/Product/listProduct/listProductFactory";
+import { deleteProductFactory } from "../useCases/Product/deleteProduct/deleteProductFactory";
+import { getProductByIdFactory } from "../useCases/Product/getProductById/getProductByIdFactory";
+import { registerProductFactory } from "../useCases/Product/registerProduct/registerProductFactory";
+import { updateProductNameFactory } from "../useCases/Product/updateProductName/updateProductNameFactory";
 
 const productsRoutes = Router()
 
-const  listProductController            = new ListProductController()
-const  deleteProductController          = new DeleteProductController()
-const  registerProductController        = new RegisterProductController()
-const  selectProductByIdController      = new SelectProductByIdController()
-const  updateProductNameDataController  = new UpdateProductNameDataController()
-
 // Register product
-    productsRoutes.post("/registerProduct",ensureAutheticate,registerProductController.handle)
+    productsRoutes.post("/registerProduct",ensureAutheticate,(request,response) => {
+        return registerProductFactory().handle(request,response)
+     })
 //
 
 // List products
-    productsRoutes.get("/productList",listProductController.handle)
+    productsRoutes.get("/listProducts",ensureAutheticate,(request,response) => {
+        return listProductFactory().handle(request,response)
+     })
 //
 
 // Get product by Id
-    productsRoutes.route('/:productId')
-    .get(selectProductByIdController.handle)
-    .delete(ensureAutheticate,deleteProductController.handle)
+    productsRoutes.get("/getProductById/:productId",ensureAutheticate,(request,response) => {
+        return getProductByIdFactory().handle(request,response)
+    })
+//
+
+// Delete product
+    productsRoutes.delete("/deleteProduct/:productId",ensureAutheticate,(request,response) => {
+        return deleteProductFactory().handle(request,response)
+     })
 //
 
 // Update product name
-    productsRoutes.route('/updateProductName/:productId')
-    .put(ensureAutheticate,updateProductNameDataController.handle)
+    productsRoutes.put("/updateProductName/:productId",ensureAutheticate,(request,response) => {
+        return updateProductNameFactory().handle(request,response)
+    })
 //
 
 export {productsRoutes}

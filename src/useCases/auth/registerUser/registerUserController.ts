@@ -2,12 +2,12 @@ import { Request, Response } from "express"
 import { RegisterUserCase } from "./registerUserCase"
 
 class RegisterUserController{
+    constructor(private registerUserCase: RegisterUserCase) {}
+
     async handle(req: Request, resp: Response){
         const {email ,username,password} = req.body
 
-        const registerUserCase = new RegisterUserCase()
-
-        const token = await registerUserCase.execute({
+        const token = await this.registerUserCase.execute({
             email,
             username,
             password

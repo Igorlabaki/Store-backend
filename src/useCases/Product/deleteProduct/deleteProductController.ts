@@ -4,13 +4,12 @@ import { DeleteProductCase } from "./deleteProductCase"
 
 
 class DeleteProductController{
+    constructor(private deleteProductCase: DeleteProductCase) {}
+    
     async handle(req: Request, resp: Response){
-
         const {productId} = req.params
 
-        const deleteProductCase = new DeleteProductCase()
-
-        const productDeleted = await deleteProductCase.execute(
+        const productDeleted = await this.deleteProductCase.execute(
             productId
         )
 

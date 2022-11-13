@@ -1,5 +1,5 @@
 import { User } from "@prisma/client"
-import { IUpdateEmailRequest, IUserRepository } from "../../../repository/IUserRepositories"
+import { IUpdateRequest, IUserRepository } from "../../../repository/IUserRepositories"
 class UpdateUserEmailCase{
     constructor(private userRepository: IUserRepository) {}
 
@@ -19,9 +19,9 @@ class UpdateUserEmailCase{
         //
 
         // Update user email
-            const userInput: IUpdateEmailRequest = {
+            const userInput: IUpdateRequest = {
                 id: userId,
-                email,          
+                reference: email,          
             }
             
             const userUpdated: User = await this.userRepository.updateEmail(userInput)

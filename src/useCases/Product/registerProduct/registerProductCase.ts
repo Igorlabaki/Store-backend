@@ -1,33 +1,25 @@
-import {client} from "../../../prisma/client"
 import { validateInput } from "../../../util/validateInput"
-import { IProductRequest, PrismaProductRepository } from "../../../repository/prisma/PrismaProductRepository"
-
-interface IUserRequest{
-    name:string,
-    price:string,
-    image:string
-    brand: string
-    brandImage: string
-    description:string
-}
-
+import { IProductRepository } from "../../../repository/IProductRepositories"
+import { IProductRequest } from "../../../repository/prisma/PrismaProductRepository"
 class RegisterProductCase{
-
-    async execute({name,price,image,brand,brandImage,description}: IUserRequest){
-
-        // Import repository
-            const productRepo = new PrismaProductRepository(client)
-        //
-
+    constructor(private productRepository: IProductRepository) {}
+    
+    async execute({name,price,productImage,brand,brandImage,description}: IProductRequest){
         // Validate inputs
-            validateInput([!!name, !!price, !!image, !!brand, !!brandImage, !!description])
+            validateInput([!!name, !!price, !!productImage, !!brand, !!brandImage, !!description])
         //
 
-        // Validate if user exists
-            const productAlreadyExists = await productRepo.getByName(name)
+        // Validate price as a number
+            if(typeof(price) === 'string'){
+                throw new Error("Price must be a number.")
+            }
+        //
+
+        // Validate if user existis
+            const productAlreadyExists = await this.productRepository.getByName(name)
         
             if(productAlreadyExists){
-                throw new Error("Product already exists")
+                throw new Error("Product already exists.")
             }
         //
        
@@ -36,12 +28,12 @@ class RegisterProductCase{
                 brand,
                 brandImage,
                 description,
-                image,
+                productImage,
                 name,
                 price        
             }
 
-            const product = await productRepo.register(prodcutInput)
+            const product = await this.productRepository.register(prodcutInput)
         //
 
         return product

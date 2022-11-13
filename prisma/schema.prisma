@@ -23,14 +23,14 @@ model User {
 }
 
 model Product {
-  id          String        @id @default(uuid())
-  name        String        @unique
-  price       String
-  image       String
-  brand       String
-  brandImage  String?
-  description String        @db.Text
-  ProductCart ProductCart[]
+  id           String        @id @default(uuid())
+  name         String        @unique
+  price        Int
+  brand        String
+  productImage String
+  brandImage   String?
+  description  String        @db.Text
+  ProductCart  ProductCart[]
 
   @@map("products")
 }

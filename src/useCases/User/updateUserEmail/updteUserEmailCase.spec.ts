@@ -29,7 +29,7 @@ describe("Updat User Email", async () => {
 
         const data = await updateUserEmailCase.execute('test@outlook.com',user.id)
         
-        expect(data.userUpdated.email).toBe('test@outlook.com')
+        expect(data.userUpdated.email).toBe('test@outlook.com') 
     });
 
     it("shoud be able to catch the user not found error", async () => {

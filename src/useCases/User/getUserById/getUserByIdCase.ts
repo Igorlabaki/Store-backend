@@ -1,6 +1,4 @@
-import { User } from "@prisma/client"
 import { IUserRepository } from "../../../repository/IUserRepositories"
-
 class GetUserByIdCase{
 
     constructor(private usersRepository: IUserRepository) {}

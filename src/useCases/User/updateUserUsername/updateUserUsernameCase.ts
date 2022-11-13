@@ -1,9 +1,5 @@
 import { User } from "@prisma/client"
-import {client} from "../../../prisma/client"
-import { IUpdateUsernameRequest, IUserRepository } from "../../../repository/IUserRepositories"
-import { PrismaUserRepository } from "../../../repository/prisma/PrismaUserRepository"
-
-
+import {  IUpdateRequest, IUserRepository } from "../../../repository/IUserRepositories"
 class UpdateUserUsernameCase{
 
     constructor(private userRepository: IUserRepository) {}
@@ -24,9 +20,9 @@ class UpdateUserUsernameCase{
         //
 
         // Update user username
-            const userInput: IUpdateUsernameRequest = {
+            const userInput: IUpdateRequest = {
                 id: userId,
-                username,          
+                reference: username,          
             }
             
             const userUpdated : User = await this.userRepository.updateUsername(userInput)

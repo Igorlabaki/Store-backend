@@ -1,26 +1,18 @@
-import {client} from "../../../prisma/client"
-import {hash} from "bcryptjs"
-import { PrismaProductRepository } from "../../../repository/prisma/PrismaProductRepository"
-
-
+import { IProductRepository } from "../../../repository/IProductRepositories"
 class DeleteProductCase{
-
+    constructor(private productRepository: IProductRepository) {}
+    
     async execute(id: string){
-
-        // Import repository
-            const productRepo = new PrismaProductRepository(client)
-        //
-
         // Validate if product exists
-            const productExists = await productRepo.getById(id)
+            const productExists = await this.productRepository.getById(id)
 
             if(!productExists){
-                throw new Error("Product dont exists")
+                throw new Error("Product do not exists.")
             }
         //
 
         // Delete product
-            const deletedProduct = productRepo.delete(id)
+            const deletedProduct = this.productRepository.delete(id)
         //
         
         return deletedProduct

@@ -3,19 +3,15 @@ import {client} from "../../prisma/client"
 import { GenerateRefreshToken } from "../../provider/GenerateRfreshToken"
 import { GenerateTokenProvider } from "../../provider/GenerateTokenProvider"
 import { PrismaUserRepository } from "../../repository/prisma/PrismaUserRepository"
-import { PrismaTokenRepository } from "../../repository/prisma/PrismaTokenRepository"
+import { ITokenRepository, PrismaTokenRepository } from "../../repository/prisma/PrismaTokenRepository"
+import { IUserRepository } from "../../repository/IUserRepositories"
 
 class RefreshTokenUserCase{
+    constructor(private userRepository: IUserRepository, private tokenRepository: ITokenRepository) {}
 
-    async execute(refresh_token: string){
-
-        // Import repository
-            const tokenRepo = new PrismaTokenRepository(client)
-            const userRepo  = new PrismaUserRepository(client)
-        //
-        
+    async execute(refresh_token: string){ 
         // Validate if token exists
-            const refreshTokenFind = await tokenRepo.get(refresh_token)
+            const refreshTokenFind = await this.tokenRepository.get(refresh_token)
 
             if(!refreshTokenFind){
                 throw new Error("Refresh token is invalid")
@@ -23,7 +19,7 @@ class RefreshTokenUserCase{
         //
 
         // Validate if user exists
-            const userAlreadyExists = await userRepo.getById(refresh_token)
+            const userAlreadyExists = await this.userRepository.getById(refresh_token)
 
             if(!userAlreadyExists){
                 throw new Error("User is invalid")
@@ -38,7 +34,7 @@ class RefreshTokenUserCase{
             
             if(refreshTokenExpired){
 
-                await tokenRepo.delete(refreshTokenFind.id)
+                await this.tokenRepository.delete(refreshTokenFind.id)
 
                 const generateRefreshTokenProvider = new GenerateRefreshToken()
                 const refreshToken = await generateRefreshTokenProvider.execute(refreshTokenFind.userId)

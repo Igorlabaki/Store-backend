@@ -2,21 +2,21 @@ import { Request, Response } from "express"
 import { RegisterProductCase } from "./registerProductCase"
 
 class RegisterProductController{
+    constructor(private registerProductCase: RegisterProductCase) {}
+
     async handle(req: Request, resp: Response){
-        const {price ,name,image,brand,brandImage,description} = req.body
+        const {price ,name,productImage,brand,brandImage,description} = req.body
 
-        const registerProductCase = new RegisterProductCase()
-
-        const user = await registerProductCase.execute({
+        const product = await this.registerProductCase.execute({
             price,
             name,
-            image,
+            productImage,
             brand,
             brandImage,
             description
         })
 
-        return resp.json(user)
+        return resp.json(product)
     }
 }
 

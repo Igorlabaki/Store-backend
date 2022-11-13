@@ -3,7 +3,7 @@ import { describe,beforeAll,it,expect, beforeEach } from "vitest";
 import { IRegisterUserRequest, IUserRepository } from "../../../repository/IUserRepositories";
 import { UsersRepositoryInMemory } from "../../../repository/in-memory/UsersRepositoryInMemory";
 
-describe("List Userd", async () => {
+describe("List Users", async () => {
     let userRepository: IUserRepository;
     let listUserCase: ListUserCase;
   

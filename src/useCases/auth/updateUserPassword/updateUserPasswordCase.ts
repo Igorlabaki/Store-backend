@@ -1,6 +1,6 @@
 import { hash } from "bcryptjs"
 import {client} from "../../../prisma/client"
-import { IUpdatePasswordRequest, IUserRepository } from "../../../repository/IUserRepositories"
+import {  IUpdateRequest, IUserRepository } from "../../../repository/IUserRepositories"
 import { PrismaUserRepository } from "../../../repository/prisma/PrismaUserRepository"
 
 
@@ -26,9 +26,9 @@ class UpdateUserPasswordCase{
         // Update password user
             const passwordHash = await hash(password, 8)
 
-            const userInput: IUpdatePasswordRequest = {
+            const userInput: IUpdateRequest = {
                 id,         
-                password: passwordHash
+                reference: passwordHash
             }
 
             const user = await this.userRepository.updatePassword(userInput)

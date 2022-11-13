@@ -1,6 +1,6 @@
 import { client } from "../../../prisma/client";
 import { PrismaUserRepository } from "../../../repository/prisma/PrismaUserRepository";
-import { UpdateUserUsernameController } from "./updateUsernameController";
+import { UpdateUserUsernameController } from "./updateUserUsernameController";
 import { UpdateUserUsernameCase } from "./updateUserUsernameCase";
 
 export const updateUserUsername = () => {

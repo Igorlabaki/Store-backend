@@ -1,15 +1,14 @@
 import { Request, Response } from "express"
 import { UpdateProductNameCase } from "./updateProductNameCase"
+class UpdateProductNameController{
+    constructor(private updateProductNameCase: UpdateProductNameCase) {}
 
-
-class UpdateProductNameDataController{
     async handle(req: Request, resp: Response){
         const {productId} = req.params
+
         const {name} = req.body
 
-        const updateProductNameCase = new UpdateProductNameCase()
-
-        const userSelected = await updateProductNameCase.execute(
+        const userSelected = await this.updateProductNameCase.execute(
             name,productId
         )
 
@@ -17,4 +16,4 @@ class UpdateProductNameDataController{
     }
 }
 
-export {UpdateProductNameDataController}
+export {UpdateProductNameController}

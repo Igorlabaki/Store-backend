@@ -30,10 +30,10 @@ describe("Updat User Email", async () => {
 
         const data = await updateUserUsername.execute('testeUsername',user.id)
         
-        expect(data.userUpdated.username).toBe('testeUsername')
+       expect(data.userUpdated.username).toBe('testeUsername')
     });
 
-    it("shoud be able to catch the user not found error", async () => {
+    it("shoud not be able to update product name because name is missing", async () => {
         await userRepository.register(userInputData)
 
         await expect(updateUserUsername.execute('test@outlook.com','test')).rejects.toEqual(

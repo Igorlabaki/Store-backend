@@ -1,6 +1,6 @@
 import { v4 as uuid } from "uuid";
 import { User } from "@prisma/client";
-import { IRegisterUserRequest, IUpdateEmailRequest, IUpdatePasswordRequest, IUpdateUsernameRequest, IUserRepository } from "../IUserRepositories";
+import { IRegisterUserRequest, IUpdateRequest, IUserRepository } from "../IUserRepositories";
 
 class UsersRepositoryInMemory implements IUserRepository {
   private users: User[] = [];
@@ -34,21 +34,21 @@ class UsersRepositoryInMemory implements IUserRepository {
     return this.users
   }
 
-  async updateEmail({email,id}: IUpdateEmailRequest):Promise<User>{
+  async updateEmail({reference,id}: IUpdateRequest):Promise<User>{
     const user = this.users.find((user) => user.id === id);
-    user.email = email
+    user.email = reference
     return user 
   }
 
-  async updateUsername({id,username}: IUpdateUsernameRequest):Promise<User>{
+  async updateUsername({id,reference}: IUpdateRequest):Promise<User>{
     const user = this.users.find((user) => user.id === id);
-    user.username = username
+    user.username = reference
     return user
   }
 
-  async updatePassword({id,password}: IUpdatePasswordRequest):Promise<User>{
+  async updatePassword({id,reference}: IUpdateRequest):Promise<User>{
     const user = this.users.find((user) => user.id === id);
-    user.password = password
+    user.password = reference
     return user
   }
 }
