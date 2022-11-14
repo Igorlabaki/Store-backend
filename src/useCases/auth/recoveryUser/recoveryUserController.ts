@@ -1,16 +1,14 @@
 import { Request, Response } from "express"
-import { RecoveyUserCase } from "./recoveyUserCase"
-
+import { RecoveryUserCase } from "./recoveyUserCase"
 class RecoveryUserController{
+    constructor(private recoveyUserCase: RecoveryUserCase) {}
+
     async handle(req: Request, resp: Response){
-
         const authHeader = req.headers.authorization
-
-        const recoveyUserCase = new RecoveyUserCase()
 
         const [,token] = authHeader.split(" ")
 
-        const user = await recoveyUserCase.execute(
+        const user = await this.recoveyUserCase.execute(
             token
         )
 

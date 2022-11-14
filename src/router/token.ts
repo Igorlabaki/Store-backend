@@ -1,14 +1,12 @@
 import {Router} from "express"
-import { RefreshTokenUserController } from "../useCases/token/refreshTokenUserController"
+import { refreshTokenFactory } from "../useCases/token/refreshTokenFactory"
 
 const tokenRoutes = Router()
 
-// Provide token
-    const refreshTokenUserController    = new RefreshTokenUserController()
-//
-
 // Provide refreshToken
-    tokenRoutes.post("/refresh-token",refreshTokenUserController.handle)
+    tokenRoutes.post("/refresh-token",(request,response) => {
+        return refreshTokenFactory().handle(request,response)
+     })
 //
 
 export {tokenRoutes}

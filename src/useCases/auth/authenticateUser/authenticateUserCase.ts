@@ -1,27 +1,21 @@
 import {compare} from "bcryptjs"
-import {client} from "../../../prisma/client"
+import { IUserRepository } from "../../../repository/IUserRepositories"
+import { ITokenRepository } from "../../../repository/ITokenRepositories"
 import { GenerateRefreshToken } from "../../../provider/GenerateRfreshToken"
-import { PrismaUserRepository } from "../../../repository/prisma/PrismaUserRepository"
 import { GenerateTokenProvider } from "../../../provider/GenerateTokenProvider"
-
-interface IRequest{
+interface IAuthenticateRequest{
     password:string,
     email:string
 }
-
 class AuthenticateUserCase{
+    constructor(private userRepository: IUserRepository, private tokenRepository: ITokenRepository) {}
 
-    async execute({password,email}: IRequest){
-
-       // Import repository
-            const userRepo = new PrismaUserRepository(client)
-        //
-
+    async execute({password,email}: IAuthenticateRequest){
        // Validate if user exists
-            const userAlreadyExists = await userRepo.getByEmail(email)
+            const userAlreadyExists = await this.userRepository.getByEmail(email)
 
             if(!userAlreadyExists){
-                throw new Error("User or password incorrect")
+                throw new Error("User or password incorrect.")
             }
         //
 
@@ -29,7 +23,7 @@ class AuthenticateUserCase{
             const passwordMatch = await compare(password, userAlreadyExists.password)
 
             if(!passwordMatch){
-                throw new Error("User or password incorrect")
+                throw new Error("User or password incorrect.")
             }
         //
 
@@ -37,7 +31,7 @@ class AuthenticateUserCase{
             const generateTokenProvider = new GenerateTokenProvider()
             const token = await generateTokenProvider.execute(userAlreadyExists)
 
-            const generateRefreshToke =     new GenerateRefreshToken()
+            const generateRefreshToke =     new GenerateRefreshToken(this.tokenRepository)
             const refreshToken = await generateRefreshToke.execute(userAlreadyExists.id)
         //
 

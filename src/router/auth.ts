@@ -1,15 +1,11 @@
 import { Router } from "express"
 import { ensureAutheticate } from "../middleware/ensureAuthenticate"
-import { RecoveryUserController } from "../useCases/auth/recoveryUser/recoveryUserController"
-import { updateUserFactory } from "../useCases/auth/updateUserPassword/updateUserPasswordFactory"
-import {  AuthenticateUserController } from "../useCases/auth/authenticateUser/authenticateUserController"
 import { registerUserFactory } from "../useCases/auth/registerUser/registerUserFactory"
+import { recoveryUserFactory } from "../useCases/auth/recoveryUser/recoveryUserFactory"
+import { updateUserFactory } from "../useCases/auth/updateUserPassword/updateUserPasswordFactory"
+import { authenticateUserFactory } from "../useCases/auth/authenticateUser/authenticateUserFactory"
 
 const authRoutes = Router()
-
-const recoveryUserController        = new RecoveryUserController()
-const authenticateUserController    = new AuthenticateUserController()
-
 // Register
     authRoutes.post("/registerUser",(request,response) => {
         return registerUserFactory().handle(request,response)
@@ -17,11 +13,15 @@ const authenticateUserController    = new AuthenticateUserController()
 //
 
 // Sign in
-    authRoutes.post("/login",authenticateUserController.handle)
+    authRoutes.post("/authenticateUser",(request,response) => {
+        return authenticateUserFactory().handle(request,response)
+    })
 //
 
 // Recovery user data
-    authRoutes.get("/recoveryUser",recoveryUserController.handle)
+    authRoutes.get("/recoveryUser",(request,response) => {
+        return recoveryUserFactory().handle(request,response)
+    })
 //
 
 // Edit user password

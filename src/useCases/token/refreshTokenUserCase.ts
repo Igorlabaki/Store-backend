@@ -1,11 +1,8 @@
 import dayjs from "dayjs"
-import {client} from "../../prisma/client"
+import { IUserRepository } from "../../repository/IUserRepositories"
+import { ITokenRepository } from "../../repository/ITokenRepositories"
 import { GenerateRefreshToken } from "../../provider/GenerateRfreshToken"
 import { GenerateTokenProvider } from "../../provider/GenerateTokenProvider"
-import { PrismaUserRepository } from "../../repository/prisma/PrismaUserRepository"
-import { ITokenRepository, PrismaTokenRepository } from "../../repository/prisma/PrismaTokenRepository"
-import { IUserRepository } from "../../repository/IUserRepositories"
-
 class RefreshTokenUserCase{
     constructor(private userRepository: IUserRepository, private tokenRepository: ITokenRepository) {}
 
@@ -36,7 +33,7 @@ class RefreshTokenUserCase{
 
                 await this.tokenRepository.delete(refreshTokenFind.id)
 
-                const generateRefreshTokenProvider = new GenerateRefreshToken()
+                const generateRefreshTokenProvider = new GenerateRefreshToken(this.tokenRepository)
                 const refreshToken = await generateRefreshTokenProvider.execute(refreshTokenFind.userId)
 
                 return {token, refreshToken}

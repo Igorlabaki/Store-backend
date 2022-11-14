@@ -1,18 +1,9 @@
-import { PrismaClient, RefreshToken } from "@prisma/client";
 import dayjs from "dayjs";
+import { PrismaClient } from "@prisma/client";
 import { refreshToken } from "../../Interfaces";
-
-export interface ITokenRepository {
-  create:(reference: string) => Promise<refreshToken>
-  get:(reference: string) => Promise<refreshToken>
-  delete:(reference: string) => Promise<refreshToken>
-}
-
+import { ITokenRepository } from "../ITokenRepositories";
 export class PrismaTokenRepository implements ITokenRepository {
-
   constructor (private readonly prisma: PrismaClient){}
-
-  
 
   async create (reference: string): Promise<refreshToken> {
 
@@ -20,7 +11,11 @@ export class PrismaTokenRepository implements ITokenRepository {
 
     return await this.prisma.refreshToken.create({
       data:{
-        userId: reference,
+        user:{
+          connect:{
+            id: reference
+          }
+        },
         expireIn: expireIn
       }
     })
@@ -36,7 +31,6 @@ export class PrismaTokenRepository implements ITokenRepository {
   }
 
   async delete (reference: string): Promise<refreshToken> {
-
     return await this.prisma.refreshToken.delete({
       where:{
           userId: reference

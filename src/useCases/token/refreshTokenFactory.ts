@@ -4,7 +4,7 @@ import { PrismaUserRepository } from "../../repository/prisma/PrismaUserReposito
 import { RefreshTokenUserCase } from "./refreshTokenUserCase";
 import { RefreshTokenUserController } from "./refreshTokenUserController";
 
-export const registerUserFactory = () => {
+export const refreshTokenFactory = () => {
   const primaUserRepository      = new PrismaUserRepository(client);
   const prismaTokenRepository    = new PrismaTokenRepository(client);
   const refreshTokensCase        = new RefreshTokenUserCase(primaUserRepository,prismaTokenRepository);

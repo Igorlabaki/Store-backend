@@ -1,24 +1,18 @@
-import {client} from "../../../prisma/client"
 import jwt_decode from "jwt-decode";
-import { PrismaUserRepository } from "../../../repository/prisma/PrismaUserRepository";
-
-class RecoveyUserCase{
+import { IUserRepository } from "../../../repository/IUserRepositories";
+class RecoveryUserCase{
+    constructor(private userRepository: IUserRepository) {}
 
     async execute(token:string){
-        
-         // Import repository
-            const userRepo = new PrismaUserRepository(client)
-        //
-        
         // Decode token
             const decoded:any = jwt_decode(token);
         //
 
         // Get user by Id 
-            const user = await userRepo.getById(decoded.id)
+            const user = await this.userRepository.getById(decoded.id)
 
             if(!user){
-                throw new Error("User not found")
+                throw new Error("User not found.")
             }
         //
 
@@ -26,4 +20,4 @@ class RecoveyUserCase{
     }
 }
 
-export {RecoveyUserCase}
+export {RecoveryUserCase}
