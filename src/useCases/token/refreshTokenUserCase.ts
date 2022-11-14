@@ -1,7 +1,7 @@
 import dayjs from "dayjs"
 import { IUserRepository } from "../../repository/IUserRepositories"
 import { ITokenRepository } from "../../repository/ITokenRepositories"
-import { GenerateRefreshToken } from "../../provider/GenerateRfreshToken"
+import { GenerateRefreshToken } from "../../provider/GenerateRefreshToken"
 import { GenerateTokenProvider } from "../../provider/GenerateTokenProvider"
 class RefreshTokenUserCase{
     constructor(private userRepository: IUserRepository, private tokenRepository: ITokenRepository) {}

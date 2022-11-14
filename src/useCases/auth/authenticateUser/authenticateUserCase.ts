@@ -1,7 +1,7 @@
 import {compare} from "bcryptjs"
 import { IUserRepository } from "../../../repository/IUserRepositories"
 import { ITokenRepository } from "../../../repository/ITokenRepositories"
-import { GenerateRefreshToken } from "../../../provider/GenerateRfreshToken"
+import { GenerateRefreshToken } from "../../../provider/GenerateRefreshToken"
 import { GenerateTokenProvider } from "../../../provider/GenerateTokenProvider"
 interface IAuthenticateRequest{
     password:string,

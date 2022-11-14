@@ -1,13 +1,5 @@
 import { Cart, PrismaClient} from "@prisma/client";
-
-export interface ICartRepository {
-  register:(reference:string) => Promise<Cart>
-  getById:(reference: string) => Promise<Cart>
-  getByUserId:(reference: string) => Promise<Cart>
-  delete:(reference: string) => Promise<void>
-  list:() => Promise<Cart[]>
-}
-
+import { ICartRepository } from "../ICartRepositories";
 export class PrismaCartRepository implements ICartRepository {
 
     constructor (private readonly prisma: PrismaClient){}
