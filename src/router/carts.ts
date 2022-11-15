@@ -1,16 +1,11 @@
 import { Router } from "express";
 import { ensureAutheticate } from "../middleware/ensureAuthenticate"
 import { listCartFactory } from "../useCases/Cart/listCarts/listCartFactory";
+import { resetCartFactory } from "../useCases/Cart/resetCart/resetCartFactory";
 import { registerCartFactory } from "../useCases/Cart/registerCart/registerCartFactory";
-import { ResetCartController } from "../useCases/Cart/resetCart/resetCartController";
-import { SelectCartByIdController } from "../useCases/Cart/selectCartById/selectCartByIdController"
-import { SelectCartByUserIdController } from "../useCases/Cart/selectCartByUserId/selectCartByIdController";
+import { getCartByUserIdFactory } from "../useCases/Cart/getCartByUserId/getCartByUserIdFactory";
 
 const cartsRoutes = Router()
-
-const  resetCartController           = new ResetCartController()
-const  selectCartByIdController      = new SelectCartByIdController()
-const  selectCartByUserIdController  = new SelectCartByUserIdController()
 
 // List carts
     cartsRoutes.get("/listCarts",ensureAutheticate,(request,response) => {
@@ -25,15 +20,21 @@ const  selectCartByUserIdController  = new SelectCartByUserIdController()
 //
 
 // Reset cart
-    cartsRoutes.delete("/resetCart/:cartId",ensureAutheticate,resetCartController.handle)
+    cartsRoutes.delete("/resetCart/:cartId",ensureAutheticate,(request,response) => {
+        return resetCartFactory().handle(request,response)
+    })
 //
 
 // Get cart by Id
-    cartsRoutes.get("/selectCartById/:cartId",ensureAutheticate,selectCartByIdController.handle)
+    cartsRoutes.get("/selectCartById/:cartId",ensureAutheticate,(request,response) => {
+        return resetCartFactory().handle(request,response)
+    })
 //
 
 // Get cart by userId
-    cartsRoutes.get("/selectCartByUserId/:userId",ensureAutheticate,selectCartByUserIdController.handle)
+    cartsRoutes.get("/selectCartByUserId/:userId",ensureAutheticate,(request,response) => {
+        return getCartByUserIdFactory().handle(request,response)
+    })
 //
 
 export {cartsRoutes}

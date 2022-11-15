@@ -31,7 +31,6 @@ describe("List Users", async () => {
         await expect(listCartsCase.execute()).rejects.toEqual(
 
             new Error("No user register yet!")
-
         );
     }); 
 })

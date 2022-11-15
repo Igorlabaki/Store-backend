@@ -1,30 +1,33 @@
-import {client} from "../../../prisma/client"
-import { PrismaCartRepository } from "../../../repository/prisma/PrismaCartRepository"
-
+import { ICartRegisterRequest, ICartRepository } from "../../../repository/ICartRepositories"
+import { IUserRepository } from "../../../repository/IUserRepositories"
 class ResetCartCase{
+    constructor(private cartRepository: ICartRepository,private userRepository: IUserRepository) {}
 
-    async execute(cartId:string,userId:string){
+    async execute({cartId,userId}: ICartRegisterRequest){
+        // Validate if user exists
+            const user = this.userRepository.getById(userId)
 
-        // Import repository
-            const cartRepo = new PrismaCartRepository(client)
+            if(!user){
+                throw new Error("User dont exists.")
+            }
         //
-
+        
         // Validate if cart exists
-            const cart = cartRepo.getById(cartId)
+            const cart = this.cartRepository.getById(cartId)
 
             if(!cart){
-                throw new Error("Cart dont exists")
+                throw new Error("Cart dont exists.")
             }
         //
 
         // Delete product
-            await cartRepo.delete(cartId)
+            await this.cartRepository.delete(cartId)
         //
 
         // Register a new cart
-            const newCart = await cartRepo.register(userId)
+            const newCart = await this.cartRepository.register(userId)
         //
-        
+
         return newCart
     }
 }

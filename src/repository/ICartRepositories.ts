@@ -1,5 +1,10 @@
 import { Cart } from "@prisma/client"
 
+export interface ICartRegisterRequest{
+  cartId : string,
+  userId : string
+}
+
 export interface ICartRepository {
     register:(reference:string) => Promise<Cart>
     getById:(reference: string) => Promise<Cart>

@@ -11,7 +11,7 @@ class RegisterCartCase{
             const userAlreadyExists = await this.userRepository.getById(userId)
 
             if(!userAlreadyExists){
-                throw new Error("User not founded.")
+                throw new Error("User not found.")
             }
         //
 

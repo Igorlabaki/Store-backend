@@ -1,43 +1,51 @@
-import { v4 as uuid } from "uuid";
-import { RegisterCartCase } from "./registerCartCase";
+
 import { describe,it,expect, beforeEach } from "vitest";
 import { ICartRepository } from "../../../repository/ICartRepositories";
-import { IRegisterUserRequest, IUserRepository } from "../../../repository/IUserRepositories";
 import { CartRepositoryInMemory } from "../../../repository/in-memory/CartRepositoryInMemory";
+import { IRegisterUserRequest, IUserRepository } from "../../../repository/IUserRepositories";
 import { UsersRepositoryInMemory } from "../../../repository/in-memory/UsersRepositoryInMemory";
-import { RegisterUserCase } from "../../auth/registerUser/registerUserCase";
+import { GetCartByUserIdCase } from "./getCartByUserIdCase";
 
-describe("Register Cart", async () => {
+describe("Get cart by id", async () => {
     let userRepository: IUserRepository;
     let cartRepository: ICartRepository;
-    let registerCartCase: RegisterCartCase;
+    let getCartByUserIdCase: GetCartByUserIdCase;
   
     beforeEach(async () => {
         // called once before all tests run
         userRepository = new UsersRepositoryInMemory();
         cartRepository = new CartRepositoryInMemory();
-        registerCartCase = new RegisterCartCase(cartRepository,userRepository);
+        getCartByUserIdCase = new GetCartByUserIdCase(cartRepository);
         // clean up function, called once after all tests run
         return async () => {
             userRepository = new UsersRepositoryInMemory();
             cartRepository = new CartRepositoryInMemory();
-            registerCartCase = new RegisterCartCase(cartRepository,userRepository);
+            getCartByUserIdCase = new GetCartByUserIdCase(cartRepository);
         }
     })
 
-    it("should not be able to register a cart because user not founded", async () => {
-        expect(registerCartCase.execute(uuid())).rejects.toEqual(
-            new Error("User not found.")
-        ); 
-    }); 
-    
-    it("should not be able to register a cart because user not founded", async () => {
+    it("should be able to get cart by user id", async () => {
         const user : IRegisterUserRequest  = {
             email: "test",
             password: "test",
             username: "test"
          }
+
         const newUser = await userRepository.register(user)
-        expect(await registerCartCase.execute(newUser.id)).haveOwnProperty("id")
+
+        const newCart = await cartRepository.register(newUser.id)
+
+        const selectedProduct = await  getCartByUserIdCase.execute(newCart.userId)
+
+        expect(selectedProduct.cart).haveOwnProperty("id")
+    });
+
+    it("should not be able to get cart beacause cart not exists", async () => {
+
+        await expect(getCartByUserIdCase.execute("testId")).rejects.toEqual(
+
+            new Error("Cart not found.")
+
+        ); 
     }); 
 })
