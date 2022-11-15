@@ -4,6 +4,7 @@ import { listCartFactory } from "../useCases/Cart/listCarts/listCartFactory";
 import { resetCartFactory } from "../useCases/Cart/resetCart/resetCartFactory";
 import { registerCartFactory } from "../useCases/Cart/registerCart/registerCartFactory";
 import { getCartByUserIdFactory } from "../useCases/Cart/getCartByUserId/getCartByUserIdFactory";
+import { getCartByIdFactory } from "../useCases/Cart/getCartById/getCartByIdFactory";
 
 const cartsRoutes = Router()
 
@@ -26,13 +27,13 @@ const cartsRoutes = Router()
 //
 
 // Get cart by Id
-    cartsRoutes.get("/selectCartById/:cartId",ensureAutheticate,(request,response) => {
-        return resetCartFactory().handle(request,response)
+    cartsRoutes.get("/:cartId",ensureAutheticate,(request,response) => {
+        return getCartByIdFactory().handle(request,response)
     })
 //
 
 // Get cart by userId
-    cartsRoutes.get("/selectCartByUserId/:userId",ensureAutheticate,(request,response) => {
+    cartsRoutes.get("/getCartByUserId/:userId",ensureAutheticate,(request,response) => {
         return getCartByUserIdFactory().handle(request,response)
     })
 //

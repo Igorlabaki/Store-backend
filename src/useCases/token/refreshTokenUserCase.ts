@@ -11,23 +11,19 @@ class RefreshTokenUserCase{
             const refreshTokenFind = await this.tokenRepository.get(refresh_token)
 
             if(!refreshTokenFind){
-                throw new Error("Refresh token is invalid")
+                throw new Error("Refresh token is invalid.")
             }
         //
 
         // Validate if user exists
-            const userAlreadyExists = await this.userRepository.getById(refresh_token)
-
-            if(!userAlreadyExists){
-                throw new Error("User is invalid")
-            }
+            const user = await this.userRepository.getById(refresh_token)
         //
 
         // Provide token to user
             const refreshTokenExpired = dayjs().isAfter(dayjs.unix(refreshTokenFind.expireIn))
             
             const generateTokenProvider = new GenerateTokenProvider()
-            const token = await generateTokenProvider.execute(userAlreadyExists)
+            const token = await generateTokenProvider.execute(user)
             
             if(refreshTokenExpired){
 

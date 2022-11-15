@@ -4,27 +4,23 @@ class ResetCartCase{
     constructor(private cartRepository: ICartRepository,private userRepository: IUserRepository) {}
 
     async execute({cartId,userId}: ICartRegisterRequest){
-        // Validate if user exists
-            const user = this.userRepository.getById(userId)
+        // Validate if user exitis
+            const userAlreadyExists = await this.userRepository.getById(userId)
 
-            if(!user){
-                throw new Error("User dont exists.")
-            }
-        //
-        
-        // Validate if cart exists
-            const cart = this.cartRepository.getById(cartId)
-
-            if(!cart){
-                throw new Error("Cart dont exists.")
+            if(!userAlreadyExists){
+                throw new Error("User not found.")
             }
         //
 
-        // Delete product
-            await this.cartRepository.delete(cartId)
-        //
+        // Validate if cart exitis
+            const cartAlreadyExists = await this.cartRepository.getByUserId(userId)
 
-        // Register a new cart
+            if(cartAlreadyExists){
+                await this.cartRepository.delete(cartId)
+            }
+        //
+     
+        // Register new cart
             const newCart = await this.cartRepository.register(userId)
         //
 

@@ -1,14 +1,10 @@
 import { Request, Response } from "express"
 import { ListProductCartCase } from "./listProductCartCase"
-
-
 class ListProductCartController{
-
+    constructor(private listProductCartCase : ListProductCartCase){}
     async handle(req: Request, resp: Response){
 
-        const listProductCartCase = new ListProductCartCase()
-
-        const user = await listProductCartCase.execute()
+        const user = await this.listProductCartCase.execute()
 
         return resp.json(user)
     }

@@ -21,13 +21,13 @@ const productsRoutes = Router()
 //
 
 // Get product by Id
-    productsRoutes.get("/getProductById/:productId",ensureAutheticate,(request,response) => {
+    productsRoutes.get("/:productId",ensureAutheticate,(request,response) => {
         return getProductByIdFactory().handle(request,response)
     })
 //
 
 // Delete product
-    productsRoutes.delete("/deleteProduct/:productId",ensureAutheticate,(request,response) => {
+    productsRoutes.delete("/:productId",ensureAutheticate,(request,response) => {
         return deleteProductFactory().handle(request,response)
      })
 //

@@ -1,29 +1,16 @@
 import { Cart, ProductCart } from "@prisma/client"
-import {client} from "../../../prisma/client"
-import { PrismaCartRepository } from "../../../repository/prisma/PrismaCartRepository"
-import { isProductInCartProps, PrismaProductCartRepository } from "../../../repository/prisma/PrismaProductCartRepository"
-
-interface IUserRequest{
-    productId:string,
-    cartId:string,
-}
-
+import { ICartRepository } from "../../../repository/ICartRepositories"
+import { IDeleteProductCase, IProductCartRepository, IsProductInCartProps } from "../../../repository/IProductCartRepositories"
 class DeleteProductCartCase{
-
-    async execute({productId, cartId}: IUserRequest){
-
-        // Importar repositorios necessarios
-            const productCartRepo   = new PrismaProductCartRepository(client)
-            const cartRepo          = new PrismaCartRepository(client)
-        //
-
+    constructor(private cartRepository: ICartRepository, private productCartRepository: IProductCartRepository){}
+    async execute({productId, cartId}: IDeleteProductCase){
         // Descobrir se tem esse produto no carrinho
-            const reqGetById : isProductInCartProps = {
+            const reqGetById : IsProductInCartProps = {
                 productId,
                 cartId
             }
 
-            const productCart : ProductCart = await productCartRepo.isProductInCart(reqGetById)
+            const productCart : ProductCart = await this.productCartRepository.isProductInCart(reqGetById)
 
             if(!productCart){
                 throw new Error("Sorry, error occour")
@@ -31,11 +18,11 @@ class DeleteProductCartCase{
         //
 
         // Encontrar o carrinho
-            const cart : Cart = await cartRepo.getById(cartId)
+            const cart : Cart = await this.cartRepository.getById(cartId)
         //
 
         // Delete o ProductCart
-            await productCartRepo.delete(productCart.id)
+            await this.productCartRepository.delete(productCart.id)
         //
 
         return cart

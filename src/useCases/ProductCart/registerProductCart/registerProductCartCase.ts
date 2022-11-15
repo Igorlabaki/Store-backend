@@ -1,33 +1,25 @@
 import { Cart, ProductCart } from "@prisma/client"
-import {client} from "../../../prisma/client"
-import { PrismaCartRepository } from "../../../repository/prisma/PrismaCartRepository"
-import { isProductInCartProps, PrismaProductCartRepository, RegisterProductCartProps, UpdateQuantityProps } from "../../../repository/prisma/PrismaProductCartRepository"
-
+import { ICartRepository } from "../../../repository/ICartRepositories"
+import { IProductCartRepository, IsProductInCartProps, RegisterProductCartProps, UpdateQuantityProps } from "../../../repository/IProductCartRepositories"
 interface iProductCartRequest{
     productId:string,
     userId:string,
     quantity: number
 }
-
 class RegisterProductCartCase{
-
+    constructor(private cartRepository:ICartRepository,private productCartRepository: IProductCartRepository){}
+    
     async execute({productId, userId,quantity}: iProductCartRequest){
-      
-        // Importar repositorios necessarios
-            const cartRepo          = new PrismaCartRepository(client)
-            const productCartRepo   = new PrismaProductCartRepository(client)
-        //
-
         // Procura carrinho
-            const cartAlreadyExists : Cart = await cartRepo.getByUserId(userId)
+            const cartAlreadyExists : Cart = await this.cartRepository.getByUserId(userId)
         //
  
         // Valida se o produto ja nao esta no carrinho
-            const reqGetById : isProductInCartProps = {
+            const reqGetById : IsProductInCartProps = {
                 productId,
                 cartId: cartAlreadyExists.id
             }
-            const productAlreadyInCart : ProductCart = await productCartRepo.isProductInCart(reqGetById)
+            const productAlreadyInCart : ProductCart = await this.productCartRepository.isProductInCart(reqGetById)
         //
  
         // Se ja existir esse produto no carrinho adiciona mais unidades
@@ -36,7 +28,7 @@ class RegisterProductCartCase{
                     productCart: productAlreadyInCart,
                     quantity
                 }
-                await productCartRepo.updateQuantity(reqRegisterProduct)
+                await this.productCartRepository.updateQuantity(reqRegisterProduct)
                 return cartAlreadyExists;
             }
         //
@@ -48,13 +40,13 @@ class RegisterProductCartCase{
                     quantity,
                     cartId: cartAlreadyExists.id
                 }
-                await productCartRepo.register(inputProductCart)
+                await this.productCartRepository.register(inputProductCart)
                 return cartAlreadyExists 
             }
         //
  
         // Cria novo carrinho
-            const newCart : Cart = await cartRepo.register(userId)
+            const newCart : Cart = await this.cartRepository.register(userId)
         //
 
         // Registra productCart no novo carrinho 
@@ -63,11 +55,10 @@ class RegisterProductCartCase{
                 quantity,
                 cartId: newCart.id
             }
-            await productCartRepo.register(inputProductCart)
+            await this.productCartRepository.register(inputProductCart)
         //
 
         /* const newCartUpdated : Cart = await cartRepo.getByUserId(userId) */
-        
         return newCart 
     }
 }

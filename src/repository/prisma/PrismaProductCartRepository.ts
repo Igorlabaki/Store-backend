@@ -1,83 +1,62 @@
 import { PrismaClient, ProductCart } from "@prisma/client";
+import { IProductCartRepository, IsProductInCartProps, RegisterProductCartProps, UpdateQuantityProps } from "../IProductCartRepositories";
+export class PrismaProductCartRepository implements IProductCartRepository {
+  constructor (private readonly prisma: PrismaClient){}
 
-export interface RegisterProductCartProps{
-  productId: string;
-  cartId: string;
-  quantity: number
-}
-
-export interface isProductInCartProps{
-  productId: string;
-  cartId: string;
-}
-
-export interface UpdateQuantityProps{
-  productCart: ProductCart;
-  quantity: number;
-}
-
-export interface IProductCartRepository {
-    register:(reference:RegisterProductCartProps) => Promise<ProductCart>
-    isProductInCart:(reference: isProductInCartProps) => Promise<ProductCart>
-    updateQuantity:(reference: UpdateQuantityProps) => Promise<ProductCart>
-    delete:(reference: string) => Promise<void>
-    list:() => Promise<ProductCart[]>
+  async register (reference: RegisterProductCartProps): Promise<ProductCart> {
+    return await this.prisma.productCart.create({
+      data:{
+        fk_id_cart: reference.cartId,
+        fk_id_product: reference.productId,
+        quantity: reference.quantity
+      }
+    })
   }
 
-export class PrismaProductCartRepository implements IProductCartRepository {
+  async isProductInCart (reference: IsProductInCartProps): Promise<ProductCart> {
+    return await this.prisma.productCart.findFirst({
+      where: {
+        fk_id_cart: reference.cartId,
+        fk_id_product: reference.productId,
+      },
+    });
+  }
 
-    constructor (private readonly prisma: PrismaClient){}
+  async getById(reference: string):Promise<ProductCart>{
+    return await this.prisma.productCart.findFirst({
+      where: {
+        id: reference
+      },
+    });
+  }
 
-    async register (reference: RegisterProductCartProps): Promise<ProductCart> {
-        return await this.prisma.productCart.create({
-            data:{
-                fk_id_cart: reference.cartId,
-                fk_id_product: reference.productId,
-                quantity: reference.quantity
-            }
-        })
-    }
+  async updateQuantity (reference: UpdateQuantityProps): Promise<ProductCart> {
+    return await this.prisma.productCart.update({
+      where:{
+        id: reference.productCart.id
+      },
+      data:{
+        quantity: reference.quantity + reference.productCart.quantity
+      }
+    })
+  }
 
-    async isProductInCart (reference: isProductInCartProps): Promise<ProductCart> {
-        return await this.prisma.productCart.findFirst({
-            where: {
-              fk_id_cart: reference.cartId,
-              fk_id_product: reference.productId,
-            },
-          });
-    }
+  async delete (reference: string): Promise<void> {
+    await this.prisma.productCart.delete({
+      where:{
+        id: reference
+      },
+    })
+  }
 
-    async updateQuantity (reference: UpdateQuantityProps): Promise<ProductCart> {
-       return await this.prisma.productCart.update({
-          where:{
-            id: reference.productCart.id
-          },
-          data:{
-            quantity: reference.quantity + reference.productCart.quantity
-          }
-        }
-      )
-    }
-
-    async delete (reference: string): Promise<void> {
-         await this.prisma.productCart.delete({
-           where:{
-             id: reference
-           },
-         }
-       )
-     }
-
-
-    async list (): Promise<ProductCart[]> {
-      return await this.prisma.productCart.findMany({
-            include:{
-                cart: true,
-                product:true
-            },
-        }
-      )
-     }
+  async list (): Promise<ProductCart[]> {
+    return await this.prisma.productCart.findMany({
+      include:{
+        cart: true,
+        product:true
+      },
+    })
+  }
 }
 
 

@@ -6,8 +6,8 @@ import { PrismaTokenRepository } from "../../../repository/prisma/PrismaTokenRep
 
 export const registerUserFactory = () => {
   const prismaUserRepository     = new PrismaUserRepository(client);
-  const tokenRepository          = new PrismaTokenRepository(client);
-  const registerUsersCase        = new RegisterUserCase(prismaUserRepository,tokenRepository);
+  const prismaTokenRepository    = new PrismaTokenRepository(client);
+  const registerUsersCase        = new RegisterUserCase(prismaUserRepository,prismaTokenRepository);
   const registerUserController   = new RegisterUserController(registerUsersCase);
 
   return registerUserController;

@@ -1,24 +1,21 @@
 import { Router } from "express";
 import { ensureAutheticate } from "../middleware/ensureAuthenticate"
-import { ListProductCartController } from "../useCases/ProductCart/listProductCart/listProductCartController";
-import { DeleteProductCartController } from "../useCases/ProductCart/deleteProductCart/deleteProductCartController";
-import { RegisterProductCartController } from "../useCases/ProductCart/registerProductCart/registerProductCartController";
-
+import { listCartFactory } from "../useCases/Cart/listCarts/listCartFactory";
+import { deleteProductCartFactory } from "../useCases/ProductCart/deleteProductCart/deleteProductCartFactory";
+import { registerProductCartFactory } from "../useCases/ProductCart/registerProductCart/registerProductCartFactory";
 
 const productCartsRoutes = Router()
 
-const  registerProductCartController    = new RegisterProductCartController()
-const  deleteProductCartController      = new DeleteProductCartController()
-const  listProductCartController        = new ListProductCartController()
-
-//// Cart router
-
 // List carts
-    productCartsRoutes.get("/listProductCarts",ensureAutheticate,listProductCartController.handle)
+    productCartsRoutes.get("/listProductCarts",ensureAutheticate,(request,response) => {
+        return listCartFactory().handle(request,response)
+    })
 //
 
 // Register cart
-    productCartsRoutes.post("/registerProductCart",ensureAutheticate,registerProductCartController.handle)
+    productCartsRoutes.post("/registerProductCart",ensureAutheticate,(request,response) => {
+        return registerProductCartFactory().handle(request,response)
+    })
 //
 
 /* // Select cart by Id
@@ -26,6 +23,8 @@ productCartsRoutes.get("/selectCartById/:cartId",ensureAutheticate,selectCartByI
 //
 
 // Remove product
-    productCartsRoutes.delete("/deleteProductCart",ensureAutheticate,deleteProductCartController.handle) 
+    productCartsRoutes.delete("/deleteProductCart",ensureAutheticate,(request,response) => {
+        return deleteProductCartFactory().handle(request,response)
+    }) 
 //
 export {productCartsRoutes}

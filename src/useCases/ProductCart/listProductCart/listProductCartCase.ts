@@ -1,19 +1,18 @@
-import {client} from "../../../prisma/client"
-import { PrismaProductCartRepository } from "../../../repository/prisma/PrismaProductCartRepository"
-
+import { IProductCartRepository } from "../../../repository/IProductCartRepositories"
 class ListProductCartCase{
-
+    constructor(private productRepository : IProductCartRepository){}
     async execute(){
-
-        // Import repository
-            const productCartRepo = new PrismaProductCartRepository(client)
-        //
-
         // Get user list 
-            const usersList = await productCartRepo.list()
+            const productcarts = await this.productRepository.list()
         //
 
-        return usersList
+        // No productCart registered
+           if(productcarts?.length === 0){
+            throw new Error("No productCart register yet!")  
+          }
+        //  
+
+        return productcarts
     }
 }
 

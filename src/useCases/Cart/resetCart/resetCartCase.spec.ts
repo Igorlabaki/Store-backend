@@ -1,13 +1,11 @@
-import { v4 as uuid } from "uuid";
+import { ResetCartCase } from "./resetCartCase";
 import { describe,it,expect, beforeEach } from "vitest";
+import { ITokenRepository } from "../../../repository/ITokenRepositories";
+import { RegisterUserCase } from "../../auth/registerUser/registerUserCase";
 import { ICartRegisterRequest, ICartRepository } from "../../../repository/ICartRepositories";
 import { IRegisterUserRequest, IUserRepository } from "../../../repository/IUserRepositories";
 import { CartRepositoryInMemory } from "../../../repository/in-memory/CartRepositoryInMemory";
 import { UsersRepositoryInMemory } from "../../../repository/in-memory/UsersRepositoryInMemory";
-import { ResetCartCase } from "./resetCartCase";
-import { ITokenRepository } from "../../../repository/ITokenRepositories";
-import { RegisterUserCase } from "../../auth/registerUser/registerUserCase";
-import { RegisterCartCase } from "../registerCart/registerCartCase";
 
 describe("Reset Cart", async () => {
     let userRepository  : IUserRepository;
@@ -36,33 +34,32 @@ describe("Reset Cart", async () => {
         password: "test",
         username: "test"
      }
-/* 
+
     it("should not be able to register a cart", async () => {
-        const newUser = await registerUserCase.execute(user)
-        const newCart = await cartRepository.register(newUser.refreshToken.userId)
+
+        const newUser = await userRepository.register(user)
+        const newCart = await cartRepository.register(newUser.id)
 
         const registercartRequest : ICartRegisterRequest  = {
             cartId: newCart?.id,
-            userId: newUser?.refreshToken.userId
+            userId: newUser?.id
         }
 
         expect(await resetCartCase.execute(registercartRequest)).haveOwnProperty("id")
-    });  */
-/* 
+    }); 
+
     it("should not be able to register a cart because cart not found", async () => {
         const newUser = await userRepository.register(user)
-
+        const newCart = await cartRepository.register(newUser.id)
 
         const registercartRequest : ICartRegisterRequest  = {
-            cartId: "sasa",
-            userId: newUser?.id
+            cartId: newCart.id,
+            userId: "fakeId"
         }
     
         expect(resetCartCase.execute(registercartRequest)).rejects.toEqual(
-            new Error("Cart not found.")
+            new Error("User not found.")
         ); 
 
-    }); */
-    
-
+    });
 })
